@@ -1,0 +1,49 @@
+﻿<Window x:Class="proiect_medii.View.WeatherWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:proiect_medii.View"
+        xmlns:vm="clr-namespace:proiect_medii.ViewModel"
+        mc:Ignorable="d"
+        Title="WeatherWindow" Height="450" Width="800">
+    <Window.Resources>
+        <vm:WeatherViewModel x:Key="vm"/>
+    </Window.Resources>
+    
+    <Grid DataContext="{StaticResource vm}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="137*"/>
+            <ColumnDefinition Width="127*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="110,30" Grid.ColumnSpan="2">
+            <TextBlock Margin="0,5" Text="Cauta un oras:"/>
+            <TextBox Text="{Binding Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Margin="0,10" Background="LightBlue" Command="{Binding SearchCommand}" CommandParameter="{Binding Query}">Cauta</Button>
+            <ListView ItemsSource="{Binding Cities}" SelectedValue="{Binding SelectedCity}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock Text="{Binding LocalizedName }"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+        <Grid Grid.Row="1" Background="DeepSkyBlue" Grid.ColumnSpan="2" DataContext="{Binding Weather}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StackPanel Margin="0,10">
+                <TextBlock FontSize="15" Margin="110,0" Height="30px" DataContext="{StaticResource vm}" Text="{Binding SelectedCity.LocalizedName}"/>
+                <TextBlock Margin="110,0" Height="30px" Text="{Binding WeatherText}"/>
+            </StackPanel>
+            <TextBlock Grid.Column="1" Margin="110,10" Text="{Binding Temperature.Metric.Value, StringFormat={}{0}C}"/>
+        </Grid>
+    </Grid>
+</Window>
